@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
-import java.lang.Object;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -21,6 +20,7 @@ public class Application {
 
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
@@ -76,8 +76,9 @@ public class Application {
     }
     
     
+    
     public static void lecturaArchivo() throws IOException{
-        File fichero = new File("dataset_amc_1920/berlin52.tsp");
+        File fichero = new File("zdataset_amc_1920/berlin52.tsp");
 //        File fichero = new File("G:\\Mi unidad\\03_Universidad\\1er Cuatri\\AMC\\AMCPrac1\\dataset_amc_1920");
         FileReader fr = new FileReader(fichero);
         BufferedReader br = new BufferedReader(fr);
@@ -87,7 +88,7 @@ public class Application {
                 linea = br.readLine();
             }
             String[] valores = linea.split(": ");
-             System.out.println("El valor de esta linea es: " + valores[1]);
+            System.out.println("El valor de esta linea es: " + valores[1]);
         } catch(FileNotFoundException e) {
             System.out.println("Archivo no encontrado: " + e.getMessage());
         } catch(IOException e) {
