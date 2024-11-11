@@ -1,0 +1,14 @@
+# Implementado
+- [ ] Menu main
+	- [x] Generar array 
+	- [x] mostrar array 
+	- [x] comprobar estrategias dataset cargado 
+	- [x] comparar todas estrategias 
+	- [ ] comparar 2 estrategias
+	- [x] leer dataset 
+- [ ] Algoritmos
+	- [x] Exhaustivo 
+	- [x] Exhaustivo Poda 
+	- [ ] Divide y venceras
+	- [ ] Divide y venceras mejorado
+- [ ] Memoria
