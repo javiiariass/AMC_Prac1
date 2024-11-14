@@ -10,7 +10,7 @@ import java.util.Random;
 
 /**
  *
- * @author javie
+ * @author javi
  */
 public class Punto {
     private double x,y;

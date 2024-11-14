@@ -11,6 +11,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -99,6 +101,14 @@ public class Application {
                 }
                 case 7 ->{ 
                     
+                try {
+                    System.out.println("Exh Normal:------------\n " + Algoritmos.exhaustivo(puntos));
+                    //System.out.println("Exh indices-------------\n" + Algoritmos.exhaustivo(puntos, 0, 0));
+                } catch (Exception e) {
+                    System.err.println("Error en el algoritmo exhaustivo: " + e.getMessage());
+                    
+                   
+                }
                 }
                 case 0 ->{
                     salir = true;
@@ -205,10 +215,6 @@ public class Application {
         }catch(IOException e){
             System.out.println("Error de escritura: " + e.getMessage() + "\nPor favor, elimine el archivo generado");
         }
-        
-        
-        
-        
     }
  
     /**
@@ -247,22 +253,22 @@ public class Application {
             ArrayList<Punto> listaAux = lista;
             
         //-----------------------------------Exhaustivo----------------------------------- 
-            //Capturar tiempo de inicio
-            tiempoInicio = System.nanoTime();
-        
-            //Ejecutamos algoritmo
-            resultado = Algoritmos.exhaustivo(listaAux);
-        
-            //Capturamos tiempo de fin
-            tiempoFin = System.nanoTime();
-
-        
-            //Obtenemos el tiempo de ejecución (en nanosegundos) y lo pasamos a ms
-            tiempoEjecucion = (tiempoFin - tiempoInicio) / 1_000_000.0;
-        
-            //Guardamos el tiempo de ejecución con la precisión de 4 decimales
-            formateaDouble(tiempoEjecucion, PRECISION_MSEG);
-            System.out.print((i*100) + "\t" + tiempoEjecucion);
+//            //Capturar tiempo de inicio
+//            tiempoInicio = System.nanoTime();
+//        
+//            //Ejecutamos algoritmo
+//            resultado = Algoritmos.exhaustivo(listaAux);
+//        
+//            //Capturamos tiempo de fin
+//            tiempoFin = System.nanoTime();
+//
+//        
+//            //Obtenemos el tiempo de ejecución (en nanosegundos) y lo pasamos a ms
+//            tiempoEjecucion = (tiempoFin - tiempoInicio) / 1_000_000.0;
+//        
+//            //Guardamos el tiempo de ejecución con la precisión de 4 decimales
+//            formateaDouble(tiempoEjecucion, PRECISION_MSEG);
+//            System.out.print((i*100) + "\t" + tiempoEjecucion);
             
         //---------------------------------ExhaustivoPoda--------------------------------- 
             listaAux = lista;
@@ -307,27 +313,27 @@ public class Application {
                             "tiempo(ms)");
         //-----------------------------------Exhaustivo-----------------------------------
         
-        //Capturar tiempo de inicio
-        tiempoInicio = System.nanoTime();
-        
-        //Ejecutamos algoritmo
-        resultado = Algoritmos.exhaustivo(puntosCopia);
-        
-        //Capturamos tiempo de fin
-        tiempoFin = System.nanoTime();
-
-        //Formateamos la distancia mínima a 8 cifras decimales
-        resultado.setDistancia(formateaDouble(resultado.getDistancia(), PRECISION_DISTANCIA));
-        
-        //Obtenemos el tiempo de ejecución (en nanosegundos) y lo pasamos a ms
-        tiempoEjecucion = (tiempoFin - tiempoInicio) / 1_000_000.0;
-        
-        //Guardamos el tiempo de ejecución con la precisión de 4 decimales
-        formateaDouble(tiempoEjecucion, PRECISION_MSEG);
-        
-        //Imprimimos el resultado
-        System.out.println("Exhaustivo\t" + resultado + "\t\t " + tiempoEjecucion);
-        
+//        //Capturar tiempo de inicio
+//        tiempoInicio = System.nanoTime();
+//        
+//        //Ejecutamos algoritmo
+//        resultado = Algoritmos.exhaustivo(puntosCopia);
+//        
+//        //Capturamos tiempo de fin
+//        tiempoFin = System.nanoTime();
+//
+//        //Formateamos la distancia mínima a 8 cifras decimales
+//        resultado.setDistancia(formateaDouble(resultado.getDistancia(), PRECISION_DISTANCIA));
+//        
+//        //Obtenemos el tiempo de ejecución (en nanosegundos) y lo pasamos a ms
+//        tiempoEjecucion = (tiempoFin - tiempoInicio) / 1_000_000.0;
+//        
+//        //Guardamos el tiempo de ejecución con la precisión de 4 decimales
+//        formateaDouble(tiempoEjecucion, PRECISION_MSEG);
+//        
+//        //Imprimimos el resultado
+//        System.out.println("Exhaustivo\t" + resultado + "\t\t " + tiempoEjecucion);
+//        
         //---------------------------------Exhaustivo poda---------------------------------
         
         //reset de arrayList

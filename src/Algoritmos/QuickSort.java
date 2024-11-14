@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author javie
+ * @author javi
  */
 public class QuickSort {
     

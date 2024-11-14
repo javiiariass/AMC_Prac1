@@ -6,7 +6,7 @@ package Algoritmos;
 
 /**
  *
- * @author javie
+ * @author javi
  * 
  */
 public class parejaPuntos {

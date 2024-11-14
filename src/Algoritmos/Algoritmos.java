@@ -8,36 +8,65 @@ import java.util.ArrayList;
 
 /**
  *
- * @author javiiariass
+ * @author javi
  */
 
 public class Algoritmos {
     
-    public static parejaPuntos exhaustivo(ArrayList<Punto> p){
+    
+    /**
+     * Calcula la pareja de puntos con menos distancia de todo el ArrayList
+     * @param p ArrayList de objetos tipo Punto
+     * @return Devuelve la pareja de puntos con la distancia más corta
+     * @throws java.lang.Exception
+     */
+    public static parejaPuntos exhaustivo(ArrayList<Punto> p) throws Exception{ 
+        return exhaustivo(p, p.size()-1, p.size()-1);
+    }
+    
+    /**
+     * Calcula la pareja de puntos con menos distancia de un fragmento del ArrayList
+     * <p> Ejemplo: para un ArrayList de 10 elementos -> inicio=4 && fin = 9, calcula
+     * la pareja de puntos desde el 5o elemento hasta el último elemento del ArrayList
+     * @param p ArrayList de objetos tipo Punto
+     * @param inicio Indica el inicio del fragmento del ArrayList a iterar 
+     * INCLUIDO EL ELEMENTO DEL INDICE ESPECIFICADO
+     * @param fin Indica el final del fragmento del ArrayList a iterar
+     * INCLUIDO EL ELEMENTO DEL INDICE ESPECIFICADO
+     * @return Devuelve la pareja de puntos con la distancia más corta del fragmento del ArrayList
+     * @throws java.lang.Exception
+     */
+    public static parejaPuntos exhaustivo(ArrayList<Punto> p, int inicio, int fin) throws Exception{
+
+
+        if(inicio==fin)
+            throw new Exception("Debe haber al menos dos puntos para calcular la distancia");
+
+
         double auxDistancia;
         parejaPuntos pareja= new parejaPuntos(
                 p.getFirst(), 
                 p.get(1), 
                 p.getFirst().distancia(p.get(1)));
-        
-        
-        for (int i = 0; i < p.size(); i++) {
-            for (int j = i+1; j < p.size(); j++) {
+
+
+        for (int i = inicio; i < fin; i++) {
+            for (int j = i+1; j <= fin; j++) {
                 auxDistancia = p.get(i).distancia(p.get(j));
                 //Si la distancia calculada es menor a la menor actual, reemplazamos valores de la pareja menor
-                
+
                 if (auxDistancia < pareja.getDistancia()){
                     pareja.setPunto1(p.get(i));
                     pareja.setPunto2(p.get(j));
                     pareja.setDistancia(auxDistancia);
                 }
                 pareja.setCalculadas(pareja.getCalculadas()+1);
-                    
+
             }
         }
-        
+
         return pareja;
-    }
+}
     
     //La idea del exhaustivo con poda es que, al tener ordenados los puntos,
     //si la distancia entre las coordenadas de un eje de dos puntos es mayor a la
