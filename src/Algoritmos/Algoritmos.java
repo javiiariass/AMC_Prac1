@@ -21,7 +21,7 @@ public class Algoritmos {
      * @throws java.lang.Exception
      */
     public static parejaPuntos exhaustivo(ArrayList<Punto> p) throws Exception{ 
-        return exhaustivo(p, p.size()-1, p.size()-1);
+        return exhaustivo(p, 0, p.size()-1);
     }
     
     /**
