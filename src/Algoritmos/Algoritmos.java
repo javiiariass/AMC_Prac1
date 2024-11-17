@@ -10,9 +10,8 @@ import java.util.ArrayList;
  *
  * @author javi
  */
-
 public class Algoritmos {
-    private static int contador = 0;
+   
     
     /**
      * Calcula la pareja de puntos con menos distancia de todo el ArrayList
@@ -36,7 +35,7 @@ public class Algoritmos {
      * @return Devuelve la pareja de puntos con la distancia más corta del fragmento del ArrayList
      * @throws java.lang.Exception
      */
-    public static parejaPuntos exhaustivo(ArrayList<Punto> p, int inicio, int fin) throws Exception{
+    public static parejaPuntos exhaustivo(ArrayList<Punto> puntos, int inicio, int fin) throws Exception{
 
 
         if(inicio==fin)
@@ -44,83 +43,52 @@ public class Algoritmos {
 
 
         double auxDistancia;
-        parejaPuntos pareja= new parejaPuntos(
-                p.get(inicio), 
-                p.get(inicio+1), 
-                p.get(inicio).distancia(p.get(inicio+1)));
+        parejaPuntos distanciaMinima= new parejaPuntos(
+                puntos.get(inicio), 
+                puntos.get(inicio+1), 
+                puntos.get(inicio).distancia(puntos.get(inicio+1)));
 
 
         for (int i = inicio; i < fin; i++) {
             for (int j = i+1; j <= fin; j++) {
-                auxDistancia = p.get(i).distancia(p.get(j));
+                auxDistancia = puntos.get(i).distancia(puntos.get(j));
                 //Si la distancia calculada es menor a la menor actual, reemplazamos valores de la pareja menor
-
-                if (auxDistancia < pareja.getDistancia()){
-                    pareja.setPunto1(p.get(i));
-                    pareja.setPunto2(p.get(j));
-                    pareja.setDistancia(auxDistancia);
+                
+                distanciaMinima.setCalculadas(distanciaMinima.getCalculadas()+1);
+                if (auxDistancia < distanciaMinima.getDistancia()){
+                    distanciaMinima = new parejaPuntos(
+                                puntos.get(i),
+                                puntos.get(j),
+                                auxDistancia,
+                                distanciaMinima.getCalculadas());
                 }
-                pareja.setCalculadas(pareja.getCalculadas()+1);
-                contador++;
-
             }
         }
 
-        return pareja;
+        return distanciaMinima;
 }
     
     //La idea del exhaustivo con poda es que, al tener ordenados los puntos,
     //si la distancia entre las coordenadas de un eje de dos puntos es mayor a la
     //distancia menor calculada, no tenemos que seguir iterando con ese punto
     public static parejaPuntos exhaustivoPoda(ArrayList<Punto> p) throws Exception{
-        return exhaustivoPoda(p,0, p.size()-1);
-        //ponemos la distancia como el máximo valor posible
-        // double auxDistancia;
-        // parejaPuntos pareja= new parejaPuntos(
-        //         p.getFirst(), 
-        //         p.get(1), 
-        //         p.getFirst().distancia(p.get(1)));
-        // double distanciaX;
-        
-        // for (int i = 0; i < p.size(); i++) {
-        //     for (int j = i+1; j < p.size(); j++) {
-                
-        //         //Si la distancia entre las coordenadas del eje de los dos puntos son ya mayores o igual
-        //         //a la distancia mínima calculada, dejamos de iterar con ese (primer)punto y pasamos al siguiente
-        //         distanciaX = Math.abs((p.get(j).getX() - p.get(i).getX()));
-        //         if( distanciaX >= pareja.getDistancia())
-        //             break;
-                
-        //         auxDistancia = p.get(i).distancia(p.get(j));
-        //         //Si la distancia calculada es menor a la menor actual, reemplazamos valores de la pareja menor
-        //         pareja.setCalculadas(pareja.getCalculadas()+1);
-        //         if (auxDistancia < pareja.getDistancia()){
-        //             pareja.setPunto1(p.get(i));
-        //             pareja.setPunto2(p.get(j));
-        //             pareja.setDistancia(auxDistancia);
-        //         }
-                    
-        //     }
-        // }
-        
-        //return pareja;
-       
+        return exhaustivoPoda(p,0, p.size()-1);       
     }
     
-    public static parejaPuntos exhaustivoPoda(ArrayList<Punto> p, int izquierda, int derecha) throws Exception{
+    public static parejaPuntos exhaustivoPoda(ArrayList<Punto> puntos, int izquierda, int derecha) throws Exception{
         
         if(izquierda==derecha)
-            throw new Exception("Exhaustivo: Debe haber al menos dos puntos para calcular la distancia");
+            throw new Exception("Exhaustivo Poda: Debe haber al menos dos puntos para calcular la distancia");
         
         //asumimos que la distancia mínima es la primera pareja de puntos
         //Aunque en el doble bucle, volvemos a compararla, esta primera distancia calculada no
         //la contaremos para el total por calcularla 2 veces
         double auxDistancia;
         
-        parejaPuntos pareja= new parejaPuntos(
-                p.get(izquierda), 
-                p.get(izquierda+1), 
-                p.get(izquierda).distancia(p.get(izquierda+1)));
+        parejaPuntos distanciaMinima= new parejaPuntos(
+                puntos.get(izquierda), 
+                puntos.get(izquierda+1), 
+                puntos.get(izquierda).distancia(puntos.get(izquierda+1)));
         double distanciaX;
         
 
@@ -131,23 +99,25 @@ public class Algoritmos {
                 
                 //Si la distancia entre las coordenadas del eje de los dos puntos son ya mayores o igual
                 //a la distancia mínima calculada, dejamos de iterar con ese (primer)punto y pasamos al siguiente
-                distanciaX = Math.abs((p.get(j).getX() - p.get(i).getX()));
-                if( distanciaX >= pareja.getDistancia())
+                distanciaX = Math.abs((puntos.get(j).getX() - puntos.get(i).getX()));
+                if( distanciaX >= distanciaMinima.getDistancia())
                     break;
                 
-                auxDistancia = p.get(i).distancia(p.get(j));
+                auxDistancia = puntos.get(i).distancia(puntos.get(j));
                 //Si la distancia calculada es menor a la menor actual, reemplazamos valores de la pareja menor
-                pareja.setCalculadas(pareja.getCalculadas()+1);
-                if (auxDistancia < pareja.getDistancia()){
-                    pareja.setPunto1(p.get(i));
-                    pareja.setPunto2(p.get(j));
-                    pareja.setDistancia(auxDistancia);
+                distanciaMinima.setCalculadas(distanciaMinima.getCalculadas()+1);
+                if (auxDistancia < distanciaMinima.getDistancia()){
+                    distanciaMinima = new parejaPuntos(
+                                puntos.get(i),
+                                puntos.get(j),
+                                auxDistancia,
+                                distanciaMinima.getCalculadas());
                 }
                     
             }
         }
         
-        return pareja;
+        return distanciaMinima;
        
     }
     
@@ -165,19 +135,17 @@ public class Algoritmos {
     public static parejaPuntos divideYVenceras(ArrayList<Punto> puntos, int izquierda, int derecha) throws Exception {
 
         if(izquierda==derecha)
-            throw new Exception("Exhaustivo: Debe haber al menos dos puntos para calcular la distancia");
-        if(izquierda == 0 && (derecha == puntos.size()-1))
-            contador=0;
+            throw new Exception("DyV: Debe haber al menos dos puntos para calcular la distancia");
+        
         //Cuando sean 3 o 2 puntos -> exhaustivo
         if (derecha - izquierda < 3)
             return exhaustivo(puntos, izquierda, derecha);
 
         int medio = (izquierda + derecha) / 2;
-        System.out.println("----------------");
         parejaPuntos distanciaIzquierda = divideYVenceras(puntos, izquierda, medio);
-        System.out.println("caldulados izda: " + distanciaIzquierda.getCalculadas());
         parejaPuntos distanciaDerecha = divideYVenceras(puntos, medio + 1, derecha);
-        System.out.println("caldulados Dcha: " + distanciaDerecha.getCalculadas());
+        
+        
         //Nos quedamos con la menor distancia 
         parejaPuntos distanciaMinima; // = distanciaIzquierda.getDistancia() < distanciaDerecha.getDistancia() ? distanciaIzquierda : distanciaDerecha;
         
@@ -192,16 +160,7 @@ public class Algoritmos {
             //Sumamos el número de distancias calculadas para mostrar el total
             distanciaMinima.setCalculadas(distanciaMinima.getCalculadas() + distanciaIzquierda.getCalculadas());
         }
-        System.out.println("Suma: " +distanciaMinima.getCalculadas()+"\n----------------------");
-
-
-        // ArrayList<Punto> franja = new ArrayList<>();
-        // for (int i = izquierda; i <= derecha; i++) {
-        //     if (Math.abs(puntos.get(i).getX() - puntos.get(medio).getX()) < distanciaMinima.getDistancia()) {
-        //         franja.add(puntos.get(i));
-        //     }
-        // }
-
+    
         //Obtenemos los elementos de la franja cental cuya distancia en X con respecto a m sea menor que distanciaMinima
         int i,j;
         double auxDistancia;
@@ -240,28 +199,102 @@ public class Algoritmos {
                         auxDistancia = puntos.get(a).distancia(puntos.get(b));
                         //Incrementamos contador de distancias calculadas
                         distanciaMinima.setCalculadas(distanciaMinima.getCalculadas()+1);
-                        contador++;
+                        
                         //Si la distancia calculada es menor a la menor actual, reemplazamos valores de la pareja menor
                         if (auxDistancia < distanciaMinima.getDistancia()){
-                            distanciaMinima.setPunto1(puntos.get(a));
-                            distanciaMinima.setPunto2(puntos.get(b));
-                            distanciaMinima.setDistancia(auxDistancia);
+                            distanciaMinima = new parejaPuntos(
+                                puntos.get(a),
+                                puntos.get(b),
+                                auxDistancia,
+                                distanciaMinima.getCalculadas());
                         }
                     }
                 }
             }
         }
         
-        if(izquierda==0 && derecha ==(puntos.size()-1))
-            distanciaMinima.setCalculadas(contador);
+       
         return distanciaMinima;
 
     }
  
-    // public static parejaPuntos dyVMejorado(ArrayList<Punto> arrayList p) {
-    //     throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    // }
+    /**
+     * 
+     * @param puntos
+     * @return
+     * @throws Exception
+     */
+    public static parejaPuntos divideYVencerasMejorado(ArrayList<Punto> puntos) throws Exception {
+        return divideYVencerasMejorado(puntos, 0, puntos.size() - 1);
+    }
+
+    /**
+     * @param puntos
+     * @param izquierda
+     * @param derecha
+     * @return
+     * @throws Exception
+     */
+    public static parejaPuntos divideYVencerasMejorado(ArrayList<Punto> puntos,int izquierda, int derecha) throws Exception {
+        if (derecha - izquierda < 3) {
+            // Caso base: si el subarreglo tiene 3 puntos o menos, usar búsqueda exhaustiva
+            return exhaustivo(puntos, izquierda, derecha);
+         }
+ 
+ 
+ 
+        // Dividir el conjunto de puntos en dos partes
+        int medio = (izquierda + derecha) / 2;
+         
+ 
+        // Dividir recursivamente en dos subproblemas
+        parejaPuntos resultadoIzquierda = divideYVencerasMejorado(puntos, izquierda, medio);
+        parejaPuntos resultadoDerecha = divideYVencerasMejorado(puntos, medio + 1, derecha);
+
+        // Obtener el mejor resultado entre ambos subproblemas
+        //parejaPuntos mejorResultado = mejorDe(resultadoIzquierda, resultadoDerecha);
+        
+        parejaPuntos mejorResultado;
+        if(resultadoIzquierda.getDistancia()< resultadoDerecha.getDistancia()){
+            mejorResultado = resultadoIzquierda;
+            mejorResultado.setCalculadas(mejorResultado.getCalculadas() + resultadoDerecha.getCalculadas());
+        }else{
+            mejorResultado = resultadoDerecha;
+            mejorResultado.setCalculadas(mejorResultado.getCalculadas() + resultadoIzquierda.getCalculadas());
+        }
+
+        // Crear la franja central
+        ArrayList<Punto> franjaCentral = new ArrayList<>();
+        for (int i = izquierda; i <= derecha; i++) {
+            if (Math.abs(puntos.get(i).getX() - puntos.get(medio).getX()) < mejorResultado.getDistancia()) 
+                franjaCentral.add(puntos.get(i));
+        }
+
+        // Ordenar la franja central por la coordenada Y
     
+        quickSortY(franjaCentral, 0, franjaCentral.size()-1);
+    
+        // Comparar los puntos en la franja central
+    
+        for (int i = 0; i < franjaCentral.size()-1; i++) {
+            for (int j = i + 1; j < franjaCentral.size() && franjaCentral.get(j).getY() - franjaCentral.get(i).getY() < mejorResultado.getDistancia(); j++) {
+                mejorResultado.setCalculadas(mejorResultado.getCalculadas() + 1);
+                double distancia = franjaCentral.get(i).distancia(franjaCentral.get(j));
+                if (distancia < mejorResultado.getDistancia()) 
+                    mejorResultado = new parejaPuntos(franjaCentral.get(i), franjaCentral.get(j), distancia, mejorResultado.getCalculadas());                 
+            }
+        }
+
+        return mejorResultado;
+     }
+
+   
+    /**
+     * Ordena el array de puntos por la coordenada X de manera creciente
+     * @param puntos
+     * @param izquierda
+     * @param derecha
+     */
     // Función principal para ordenar el arreglo usando QuickSort
     public static void quickSort(ArrayList<Punto> puntos, int izquierda, int derecha) {
         
@@ -290,6 +323,44 @@ public class Algoritmos {
                 quickSort(puntos, izquierda, j);
             if (i < derecha)
                 quickSort(puntos, i, derecha);
+        }
+    }
+
+    
+
+    /**
+     * Ordena el array de puntos por la coordenada Y de manera creciente
+     * @param puntos
+     * @param izquierda
+     * @param derecha
+     */
+    public static void quickSortY(ArrayList<Punto> puntos, int izquierda, int derecha) {
+        
+        if (izquierda < derecha) {
+            Punto pivote = puntos.get(izquierda);
+            int i = izquierda;
+            int j = derecha;
+
+            while (i <= j) {
+                while (puntos.get(i).getY() < pivote.getY()) {
+                    i++;
+                }
+                while (puntos.get(j).getY() > pivote.getY()) {
+                    j--;
+                }
+                if (i <= j) {
+                    Punto temp = puntos.get(i);
+                    puntos.set(i, puntos.get(j));
+                    puntos.set(j, temp);
+                    i++;
+                    j--;
+                }
+            }
+
+            if (izquierda < j)
+                quickSortY(puntos, izquierda, j);
+            if (i < derecha)
+                quickSortY(puntos, i, derecha);
         }
     }
     

@@ -58,7 +58,13 @@ public class Punto {
     
     
 
-    
+    /**
+     * 
+     * @param puntos
+     * @param numPuntos
+     * @param mismaX true si peor caso activao (todos los puntos en la misma X)
+     * @param decPrecision
+     */
     public static void rellenarPuntos(ArrayList<Punto> puntos, int numPuntos, boolean mismaX, int decPrecision) {
         Random rand = new Random();
         double x;

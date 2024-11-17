@@ -53,6 +53,13 @@ public class parejaPuntos {
         this.distancia=distancia;
         this.calculadas = 0;
     }
+
+    public parejaPuntos(Punto punto1, Punto punto2, double distancia, int calculadas){
+        this.punto1=punto1;
+        this.punto2=punto2;
+        this.distancia=distancia;
+        this.calculadas = calculadas;
+    }
     
     public parejaPuntos(){
         this.punto1=null;
