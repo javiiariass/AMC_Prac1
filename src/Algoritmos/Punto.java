@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class Punto {
     private double x,y;
-    private int id;
+    private final int id;
 
     public double getX() {
         return x;

@@ -1,18 +1,12 @@
 package Algoritmos;
 
-//import java.io.BufferedReader;
-//import java.io.BufferedWriter;
-//import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.io.FileReader;
-//import java.io.FileWriter;
-//import java.io.IOException;
 import java.io.*;
+import static java.lang.Thread.sleep;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -30,10 +24,9 @@ public class Application {
     private static final int PRECISION_DISTANCIA=8;
     /**
      * @param args the command line arguments
-     * @throws java.io.IOException
+     * //@throws java.io.IOException
      */
-    public static void main(String[] args) throws IOException {
-        // TODO code application logic here
+    public static void main(String[] args) {//throws IOException {
         
         int opcionMenu;
         int algoritmo = 0;
@@ -43,9 +36,11 @@ public class Application {
         
         String[] algoritmos = new String[]{"Exhaustivo","Divide y venceras","Voraz"};
         do {            
-            System.out.println("\n\n"+
-                    "------------------------------------------------------\n"
-                    + "\t\t\t\t" + "Algoritmo: " + algoritmos[algoritmo]);
+            System.out.println("""
+                               
+                               
+                               ------------------------------------------------------
+                                        Algoritmo: """ + algoritmos[algoritmo]);
             System.out.println("1. Generar Array.");
             System.out.println("2. Mostrar Array.");
             System.out.println("3. Comprobar estrategias con dataset cargado");
@@ -55,66 +50,78 @@ public class Application {
             System.out.println("0. Salir");
             Scanner entrada = new Scanner(System.in);
             opcionMenu = entrada.nextInt();
-            
-            switch (opcionMenu) {
+            try {
+                switch (opcionMenu) {
 
-                case 1 -> {
-                    
-                    //Antes de empezar a añadir elementos a la lista, la vacíamos
-                    puntosVacios(puntos);
-                    System.out.print("Introduce la talla del archivo a generar: ");
-                    int talla = entrada.nextInt();
-                    System.out.println("Creando nuevo dataset de puntos...");
-                    Punto.rellenarPuntos(puntos, talla, false, 10);
-                    
-                    nombreArchivoLeido = "dataset" + puntos.size();
-                    guardarEnArchivo(puntos,nombreArchivoLeido);
-                    
-                }
-                case 2 ->{
-                    for (Punto i : puntos) {
-                        System.out.println("Punto " + i);
-                        //System.out.println("Punto " + i.getId() + ": " + i.getX() + ", " + i.getY());
+                    case 1 -> {
+                        
+                        //Antes de empezar a añadir elementos a la lista, la vacíamos
+                        puntosVacios(puntos);
+                        System.out.print("Introduce la talla del archivo a generar: ");
+                        int talla = entrada.nextInt();
+                        System.out.println("Creando nuevo dataset de puntos...");
+                        Punto.rellenarPuntos(puntos, talla, false, 10);
+                        
+                        nombreArchivoLeido = "dataset" + puntos.size();
+                        guardarEnArchivo(puntos,nombreArchivoLeido);
+                        
+                    }
+                    case 2 ->{
+                        for (Punto i : puntos) {
+                            System.out.println("Punto " + i);
+                            //System.out.println("Punto " + i.getId() + ": " + i.getX() + ", " + i.getY());
+                        }
+                        System.out.println("ordenado-----------");
+                        ArrayList<Punto> aux = new ArrayList<>(puntos);
+                        Algoritmos.quickSort(aux,0, aux.size()-1);
+                        for (Punto i : aux) {
+                            System.out.println("Punto " + i);
+                            //System.out.println("Punto " + i.getId() + ": " + i.getX() + ", " + i.getY());
+                        }
+                    }
+                    case 3 -> {
+                        if(puntos.isEmpty()){
+                            System.out.println("Aún no se ha cargado/generado ningún dataset en memoria");
+                            break;
+                        }
+                        System.out.println("dataset seleccionado: " + nombreArchivoLeido);
+                        comprobarEstrategias(puntos);
+                        
+                    }   
+                    case 4 ->{
+                        compararTodasEstrategias();
+                    }
+                    case 5-> {
+                        Algoritmos.quickSort(puntos, 0, puntos.size()-1);;
+                        System.out.println("Resultado Algoritmo: " + Algoritmos.divideYVenceras(puntos));
+                        
+                        //compararDosEstrategias();
+                    }
+                    case 6 -> {
+                        entrada.nextLine(); // Limpiamos el buffer antes de leer el nombre del archivo
+                        System.out.print("Introduce el nombre del archivo a cargar (por ejemplo, berlin52): ");
+                        String nombreArchivo = entrada.nextLine();
+                        puntosVacios(puntos);
+                        puntos = lecturaArchivo(nombreArchivo);
+                        nombreArchivoLeido = nombreArchivo;
+                    }
+                    case 7 ->{ 
+                        System.out.println("Eshaustivo--------\n" + Algoritmos.exhaustivo(puntos));
+                        
+                    }
+                    case 0 ->{
+                        salir = true;
+                    }
+                    default -> { 
+                        System.out.println("Elección no válida");
+                        sleep(1000);
                     }
                 }
-                case 3 -> {
-                    if(puntos.isEmpty()){
-                        System.out.println("Aún no se ha cargado/generado ningún dataset en memoria");
-                        break;
-                    }
-                    System.out.println("dataset seleccionado: " + nombreArchivoLeido);
-                    comprobarEstrategias(puntos);
-                    
-                }   
-                case 4 ->{
-                    compararTodasEstrategias();
-                }
-                case 5-> {
-                    //compararDosEstrategias();
-                }
-                case 6 -> {
-                    entrada.nextLine(); // Limpiamos el buffer antes de leer el nombre del archivo
-                    System.out.print("Introduce el nombre del archivo a cargar (por ejemplo, berlin52): ");
-                    String nombreArchivo = entrada.nextLine();
-                    puntos = lecturaArchivo(nombreArchivo);
-                    nombreArchivoLeido = nombreArchivo;
-                }
-                case 7 ->{ 
-                    
-                try {
-                    System.out.println("Exh Normal:------------\n " + Algoritmos.exhaustivo(puntos));
-                    //System.out.println("Exh indices-------------\n" + Algoritmos.exhaustivo(puntos, 0, 0));
-                } catch (Exception e) {
-                    System.err.println("Error en el algoritmo exhaustivo: " + e.getMessage());
-                    
-                   
-                }
-                }
-                case 0 ->{
-                    salir = true;
-                }
-                default -> throw new AssertionError();
+                
+            } catch (Exception e) {
+                System.err.println("Error " + e.getMessage());
             }
+            
         } while (!salir);
     }
     
@@ -126,9 +133,9 @@ public class Application {
      * <p> Introducir UNICAMENTE NOMBRE de archivo ubicado en carpeta datasets del proyecto. El programa se encarga de ubicarlo y 
      * añadirle la extensión .tsp
      * @return Devuelve una lista de los puntos leidos del fichero o una lista vacía en su defecto 
-     * @throws IOException 
+     * //@throws IOException 
      */
-    public static ArrayList<Punto> lecturaArchivo(String rutaArchivo) throws IOException{
+    public static ArrayList<Punto> lecturaArchivo(String rutaArchivo) {//throws IOException{
         File fichero = new File("datasets/" + rutaArchivo + ".tsp");      
         int dimension =0;
         ArrayList<Punto> puntos = new ArrayList<>();
@@ -136,8 +143,7 @@ public class Application {
         //Con try-with-resources nos aseguramos de que los recursos se cierren, ocurra o no una excepción
         try (BufferedReader br = new BufferedReader(new FileReader(fichero))){
             
-            //Antes de empezar a añadir elementos a la lista, la vacíamos
-            puntosVacios(puntos);
+            
             
             String linea;
             //leemos mientras que la linea leida no devuelva nulo
@@ -188,9 +194,9 @@ public class Application {
      *
      * @param puntos lista de puntos a escribir en archivo
      * @param nombreArchivo nombre del archivo a guardar
-     * @throws IOException
+     * //@throws IOException
      */
-    public static void guardarEnArchivo(ArrayList<Punto> puntos, String nombreArchivo) throws IOException {
+    public static void guardarEnArchivo(ArrayList<Punto> puntos, String nombreArchivo) {//throws IOException {
         
                                 //Si el archivo ya existe, lo sobrescribe 
         
@@ -239,7 +245,7 @@ public class Application {
     }
     
     
-    public static void compararTodasEstrategias(){
+    public static void compararTodasEstrategias() throws Exception{
         long tiempoInicio,tiempoFin;
         double tiempoEjecucion;
         parejaPuntos resultado;
@@ -275,7 +281,7 @@ public class Application {
             //Capturar tiempo de inicio
             tiempoInicio = System.nanoTime();
             //Ordenamos Array
-            QuickSort.quickSort(listaAux, 0, listaAux.size()-1);
+            Algoritmos.quickSort(listaAux, 0, listaAux.size()-1);
             //Ejecutamos algoritmo
             resultado = Algoritmos.exhaustivoPoda(listaAux);
         
@@ -298,11 +304,11 @@ public class Application {
     /**
      * Comprueba las estrategias
      * @param puntos 
+     * @throws Exception Lanza posibles excepciones de los 4 algoritmos 
      */
-    public static void comprobarEstrategias(ArrayList<Punto> puntos) {
+    public static void comprobarEstrategias(ArrayList<Punto> puntos) throws Exception {
         long tiempoInicio,tiempoFin;
         double tiempoEjecucion;
-        ArrayList<Punto> puntosCopia = puntos;
         parejaPuntos resultado;
         // Mostramos cabecera
         System.out.println("Estrategia\t" + 
@@ -311,39 +317,41 @@ public class Application {
                             "distancia\t" + 
                             "calculadas\t" + 
                             "tiempo(ms)");
+        
+        
         //-----------------------------------Exhaustivo-----------------------------------
         
-//        //Capturar tiempo de inicio
-//        tiempoInicio = System.nanoTime();
-//        
-//        //Ejecutamos algoritmo
-//        resultado = Algoritmos.exhaustivo(puntosCopia);
-//        
-//        //Capturamos tiempo de fin
-//        tiempoFin = System.nanoTime();
-//
-//        //Formateamos la distancia mínima a 8 cifras decimales
-//        resultado.setDistancia(formateaDouble(resultado.getDistancia(), PRECISION_DISTANCIA));
-//        
-//        //Obtenemos el tiempo de ejecución (en nanosegundos) y lo pasamos a ms
-//        tiempoEjecucion = (tiempoFin - tiempoInicio) / 1_000_000.0;
-//        
-//        //Guardamos el tiempo de ejecución con la precisión de 4 decimales
-//        formateaDouble(tiempoEjecucion, PRECISION_MSEG);
-//        
-//        //Imprimimos el resultado
-//        System.out.println("Exhaustivo\t" + resultado + "\t\t " + tiempoEjecucion);
-//        
+       //Capturar tiempo de inicio
+       tiempoInicio = System.nanoTime();
+       
+       //Ejecutamos algoritmo
+       resultado = Algoritmos.exhaustivo(puntos);
+       
+       //Capturamos tiempo de fin
+       tiempoFin = System.nanoTime();
+
+       //Formateamos la distancia mínima a 8 cifras decimales
+       resultado.setDistancia(formateaDouble(resultado.getDistancia(), PRECISION_DISTANCIA));
+       
+       //Obtenemos el tiempo de ejecución (en nanosegundos) y lo pasamos a ms
+       tiempoEjecucion = (tiempoFin - tiempoInicio) / 1_000_000.0;
+       
+       //Guardamos el tiempo de ejecución con la precisión de 4 decimales
+       formateaDouble(tiempoEjecucion, PRECISION_MSEG);
+       
+       //Imprimimos el resultado
+       System.out.println("Exhaustivo\t" + resultado + "\t\t " + tiempoEjecucion);
+       
         //---------------------------------Exhaustivo poda---------------------------------
         
-        //reset de arrayList
-        puntosCopia = new ArrayList<>(puntos);
+        //Creamos copia para no modificar array original
+        ArrayList<Punto> puntosCopia = new ArrayList<>(puntos);
         
         //Capturar tiempo de inicio
         tiempoInicio = System.nanoTime();
         
         //Ordenamos Array
-        QuickSort.quickSort(puntosCopia, 0, puntosCopia.size()-1);
+        Algoritmos.quickSort(puntosCopia, 0, puntosCopia.size()-1);
         //Ejecutamos algoritmo
         resultado = Algoritmos.exhaustivoPoda(puntosCopia);
         
@@ -362,33 +370,33 @@ public class Application {
         //Imprimimos el resultado
         System.out.println("Exhaustivo Poda\t" + resultado + "\t\t " + tiempoEjecucion);
         
-//         //---------------------------------Divide y Vencerás---------------------------------
-//        
-//        //reset de arrayList
-//        puntosCopia = new ArrayList<>(puntos);
-//        
-//        //Capturar tiempo de inicio
-//        tiempoInicio = System.nanoTime();
-//        
-//        //Ordenamos Array
-//        QuickSort.quickSort(puntosCopia, 0, puntosCopia.size()-1);
-//        //Ejecutamos algoritmo
-//        resultado = Algoritmos.divideYVenceras(puntosCopia);
-//        
-//        //Capturamos tiempo de fin
-//        tiempoFin = System.nanoTime();
-//
-//        //Formateamos la distancia mínima a 8 cifras decimales
-//        resultado.setDistancia(formateaDouble(resultado.getDistancia(), PRECISION_DISTANCIA));
-//        
-//        //Obtenemos el tiempo de ejecución (en nanosegundos) y lo pasamos a ms
-//        tiempoEjecucion = (tiempoFin - tiempoInicio) / 1_000_000.0;
-//        
-//        //Guardamos el tiempo de ejecución con la precisión de 4 decimales
-//        formateaDouble(tiempoEjecucion, PRECISION_MSEG);
-//        
-//        //Imprimimos el resultado
-//        System.out.println("Divide y Vencerás\t" + resultado + "\t\t " + tiempoEjecucion);
+        //---------------------------------Divide y Vencerás---------------------------------
+       
+       //reset de arrayList
+       puntosCopia = new ArrayList<>(puntos);
+       
+       //Capturar tiempo de inicio
+       tiempoInicio = System.nanoTime();
+       
+       //Ordenamos Array
+       Algoritmos.quickSort(puntosCopia, 0, puntosCopia.size()-1);
+       //Ejecutamos algoritmo
+       resultado = Algoritmos.divideYVenceras(puntosCopia);
+       
+       //Capturamos tiempo de fin
+       tiempoFin = System.nanoTime();
+
+       //Formateamos la distancia mínima a 8 cifras decimales
+       resultado.setDistancia(formateaDouble(resultado.getDistancia(), PRECISION_DISTANCIA));
+       
+       //Obtenemos el tiempo de ejecución (en nanosegundos) y lo pasamos a ms
+       tiempoEjecucion = (tiempoFin - tiempoInicio) / 1_000_000.0;
+       
+       //Guardamos el tiempo de ejecución con la precisión de 4 decimales
+       formateaDouble(tiempoEjecucion, PRECISION_MSEG);
+       
+       //Imprimimos el resultado
+       System.out.println("Divide y Vencerás\t" + resultado + "\t\t " + tiempoEjecucion);
         
     }
     
